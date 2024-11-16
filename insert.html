@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据插入页面</title>
+</head>
+<body>
+    <h1>数据插入页面</h1>
+
+    <label for="username">用户名：</label>
+    <input type="text" id="username"><br><br>
+
+    <label for="password">密码：</label>
+    <input type="password" id="password"><br><br>
+
+    <button onclick="login()">登录</button>
+
+    <div id="insertForm" style="display: none;">
+        <label for="authorizationNumber">授权号：</label>
+        <input type="text" id="authorizationNumber"><br><br>
+
+        <label for="website">网址：</label>
+        <input type="text" id="website"><br><br>
+
+        <label for="number">编号：</label>
+        <input type="text" id="number"><br><br>
+
+        <label for="approver">授权人：</label>
+        <input type="text" id="approver"><br><br>
+
+        <label for="approvalDate">核审日期：</label>
+        <input type="date" id="approvalDate"><br><br>
+
+        <label for="remarks">备注：</label>
+        <input type="text" id="remarks"><br><br>
+
+        <label for="phoneNumber">电话号码：</label>
+        <input type="tel" id="phoneNumber"><br><br>
+
+        <label for="email">邮箱：</label>
+        <input type="email" id="email"><br><br>
+
+        <label for="internalLink">站内链接：</label>
+        <input type="text" id="internalLink"><br><br>
+
+        <button onclick="insertData()">插入数据</button>
+    </div>
+
+    <script>
+        function login() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            if (username === "admin" && password === "admin123") {
+                document.getElementById("insertForm").style.display = "block";
+            } else {
+                alert("登录失败，请检查用户名和密码。");
+            }
+        }
+
+        function insertData() {
+            const newData = {
+                "authorizationNumber": document.getElementById("authorizationNumber").value,
+                "website": document.getElementById("website").value,
+                "number": document.getElementById("number").value,
+                "approver": document.getElementById("approver").value,
+                "approvalDate": document.getElementById("approvalDate").value,
+                "remarks": document.getElementById("remarks").value,
+                "phoneNumber": document.getElementById("phoneNumber").value,
+                "email": document.getElementById("email").value,
+                "internalLink": document.getElementById("internalLink").value
+            };
+
+            fetch('insert.php', {
+                method: 'POST',
+                body: JSON.stringify(newData),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("数据插入成功。");
+                } else {
+                    alert("数据插入失败。" + data.message);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

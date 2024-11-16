@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>查询系统</title>
+</head>
+
+<body>
+    <h1>查询系统</h1>
+
+    <label for="searchOption">请选择查询选项：</label>
+    <select id="searchOption">
+        <option value="authorizationNumber">授权号</option>
+        <option value="website">网址</option>
+        <option value="number">编号</option>
+    </select>
+    <input type="text" id="searchInput">
+    <button onclick="searchData()">查询</button>
+
+    <div id="searchResults"></div>
+
+    <script>
+        function searchData() {
+            const searchOption = document.getElementById("searchOption").value;
+            const searchValue = document.getElementById("searchInput").value;
+
+            fetch('database.json')
+                .then(response => response.json())
+                .then(data => {
+                    const results = data.filter(item => item[searchOption] === searchValue);
+
+                    if (results.length === 0) {
+                        document.getElementById("searchResults").innerText = "未找到匹配结果。";
+                    } else {
+                        const result = results[0];
+                        document.getElementById("searchResults").innerHTML = `
+                            <p>授权号：${result.authorizationNumber}</p>
+                            <p>网址：${result.website}</p>
+                            <p>编号：${result.number}</p>
+                            <p>核审日期：${result.approvalDate}</p>
+                            <button onclick="viewDetails('${result.internalLink}')">查看详细信息</button>
+                        `;
+                    }
+                });
+        }
+
+        function viewDetails(internalLink) {
+            window.location.href = internalLink;
+        }
+    </script>
+</body>
+
+</html>
