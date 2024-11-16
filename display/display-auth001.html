@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>展示数据页面</title>
+</head>
+<body>
+    <h1>展示授权号为 Auth001 的数据</h1>
+
+    <div id="data"></div>
+
+    <script>
+        // 直接请求指定的授权号数据，这里指定为 Auth001
+        const authNumber = 'Auth001';
+
+        fetch('../get_data.php?auth=' + authNumber) // 注意更改了路径
+        .then(response => response.json())
+        .then(data => {
+            if (data.length > 0) {
+                let table = '<table border="1">';
+                table += '<tr><th>授权号</th><th>网址</th><th>编号</th><th>授权人</th><th>核审日期</th><th>备注</th><th>电话号码</th><th>邮箱</th><th>站内链接</th></tr>';
+                
+                data.forEach(entry => {
+                    table += '<tr>';
+                    table += '<td>' + entry.authorizationNumber + '</td>';
+                    table += '<td>' + entry.website + '</td>';
+                    table += '<td>' + entry.number + '</td>';
+                    table += '<td>' + entry.approver + '</td>';
+                    table += '<td>' + entry.approvalDate + '</td>';
+                    table += '<td>' + entry.remarks + '</td>';
+                    table += '<td>' + entry.phoneNumber + '</td>';
+                    table += '<td>' + entry.email + '</td>';
+                    table += '<td>' + entry.internalLink + '</td>';
+                    table += '</tr>';
+                });
+
+                table += '</table>';
+                document.getElementById("data").innerHTML = table;
+            } else {
+                document.getElementById("data").innerHTML = "未找到匹配的数据。";
+            }
+        });
+    </script>
+</body>
+</html>
